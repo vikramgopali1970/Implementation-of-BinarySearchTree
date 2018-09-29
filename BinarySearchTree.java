@@ -6,6 +6,7 @@ package vxg180002;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Stack;
 
 public class BinarySearchTree<T extends Comparable<? super T>> implements Iterable<T> {
     static class Entry<T> {
@@ -21,47 +22,202 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Iterab
 
     Entry<T> root;
     int size;
+    Stack<Entry<T>> stck = new Stack<>();
+
 
     public BinarySearchTree() {
-        root = null;
+        this.root = null;
         size = 0;
     }
 
+    /**
+     * TO DO: Find x in the tree
+     * Helper method to find an element x of Object type T, which intern calls another method with required parameters
+     * which will return a node containing element x or a node where the method failed to find x as it was not present
+     * in the BinarySearchTree.
+     *
+     * @param   x   a value of object type T to be searched for
+     * @return      returns the node at which x was found or failed to be found
+     * */
+    public Entry<T> find(T x){
+        this.stck.push(null);
+        return this.find(this.root,x);
+    }
 
-    /** TO DO: Is x contained in tree?
+    /**
+     * TO DO: Find x in the tree
+     * Returns the node which contains the element x of Object type T if it is present. In case the element x of Object
+     * type T is not present in the BinarySearchTree it will return the node at which the method failed to find the
+     * element.
+     * As we search through the BinarySearchTree we keep on storing the parent of nodes we travel in a stack.
+     *
+     * @param   node    root of the BinarySearchTree
+     * @param   x       a value of object type T to be searched for
+     * @return          returns the node at which x was found or failed to be found
+     * */
+    public Entry<T> find(Entry<T> node,T x){
+        if(node == null || node.element == x){
+            return node;
+        }
+        while(true){
+            if (x.compareTo(node.element) < 0){
+                if (null == node.left){
+                    break;
+                }else{
+                    this.stck.push(node);
+                    node = node.left;
+                }
+            }else if (x.compareTo(node.element) == 0){
+                break;
+            }else{
+                if(null == node.right){
+                    break;
+                }else{
+                    this.stck.push(node);
+                    node = node.right;
+                }
+            }
+        }
+        return node;
+    }
+
+
+    /**
+     * TO DO: Is x contained in tree?
+     * Returns a boolean value true if the element x of Object type T is present
+     * int the BinarySearchTree else will return a false.
+     *
+     * @param   x   a value of object type T that is to checked if contains or not
+     * @return      returns boolean value based on whether element x is in the tree or not
      */
     public boolean contains(T x) {
-        return false;
+        Entry<T> node = this.find(x);
+        if(null == node || node.element.compareTo(x) != 0) {
+            return false;
+        }else{
+            return true;
+        }
     }
 
-    /** TO DO: Is there an element that is equal to x in the tree?
-     *  Element in tree that is equal to x is returned, null otherwise.
+    /**
+     * TO DO: Is there an element that is equal to x in the tree?
+     * Returns an element x of object type T if the element is present in the BinarySearchTree or null otherwise.
+     *
+     * @param   x   a value of object type T
+     * @return      element x of object type T if the element is present in the BinarySearchTree else null
      */
     public T get(T x) {
-        return null;
+        if(this.contains(x)){
+            return x;
+        }else{
+            return null;
+        }
     }
 
-    /** TO DO: Add x to tree. 
-     *  If tree contains a node with same key, replace element by x.
-     *  Returns true if x is a new element added to tree.
-     */
+
+    /**
+     * TO DO: Add x to tree.
+     * Returns boolean true if the element x of Object Type T was added to the BinarySearchTree, otherwise returns false
+     * if the element x is already present by replacing the existing element x in BinarySearchTree.
+     *
+     * @param   x   a value of Object Type T to be inserted into BinarySearchTree
+     * @return      true if new Element is added and false if existing element is replaced
+     * */
     public boolean add(T x) {
-        return true;
+        if(this.size == 0){
+            this.root = new Entry<T>(x,null,null);
+            this.size++;
+            return true;
+        }else{
+            Entry<T> node = find(x);
+            if(x.compareTo(node.element) == 0){
+                node.element = x;
+                return false;
+            }else{
+                if(x.compareTo(node.element) < 0){
+                    node.left = new Entry<T>(x,null,null);
+                }else{
+                    node.right = new Entry<T>(x,null,null);
+                }
+                this.size++;
+                return true;
+            }
+        }
     }
 
     /** TO DO: Remove x from tree. 
-     *  Return x if found, otherwise return null
+     * Returns the element x of object type T, if the element x is found in the BinarySearchTree, otherwise returns
+     * null.
+     *
+     * @param   x   a value of Object Type T to be removed from BinarySearchTree
+     * @return      element x of object type T if new Element is added and null if element does not exist
      */
     public T remove(T x) {
-        return null;
+        if (this.size == 0){
+            return null;
+        }else{
+            Entry<T> node = find(x);
+            if(node.element.compareTo(x) != 0){
+                return null;
+            }
+            T removed = node.element;
+            if(null == node.left || null == node.right){
+                bypass(node);
+            }else{
+                this.stck.push(node);
+                Entry<T> minRight = find(node.right,x);
+                node.element = minRight.element;
+                bypass(minRight);
+            }
+            this.size--;
+            return removed;
+        }
     }
 
+    /** TO DO: Bypass the node to connect node's parent and node's child.
+     *
+     * @param   node   node that needs to be bypassed in BinarySearchTree
+     */
+    public void bypass(Entry<T> node){
+        Entry<T> parent = this.stck.peek();
+        Entry<T> child = (null == node.left)?node.right:node.left;
+        if(null == parent){
+            this.root = child;
+        }else if(parent.left == node){
+            parent.left = child;
+        }else{
+            parent.right = child;
+        }
+    }
+
+    /**
+     *  Returns the minimum element in the BinarySearchTree
+     * @return   element x of object type T which is smallest in BinarySearchTree
+     */
     public T min() {
-        return null;
+        if (this.size == 0){
+            return null;
+        }
+        Entry<T> node = root;
+        while(null != node.left){
+            node = node.left;
+        }
+        return node.element;
     }
 
+    /**
+     *  Returns the maximum element in the BinarySearchTree
+     * @return   element x of object type T which is largest in BinarySearchTree
+     */
     public T max() {
-        return null;
+        if (this.size == 0){
+            return null;
+        }
+        Entry<T> node = root;
+        while(null != node.right){
+            node = node.right;
+        }
+        return node.element;
     }
 
     // TODO: Create an array with the elements using in-order traversal of tree
