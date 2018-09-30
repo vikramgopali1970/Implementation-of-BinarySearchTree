@@ -1,10 +1,13 @@
-/** @author
- *  Binary search tree (starter code)
- **/
+/**
+ * Team Members :
+ * Vikram Gopali (netId : vxg180002)
+ * Sreeram Chittela (netId : sxc180025)
+ *
+ */
+
 
 package vxg180002;
 
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -223,7 +226,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Iterab
     //
     /**
      * TODO: Create an array with the elements using in-order traversal of tree
-     * returns a comparable array 
+     * returns a comparable array of the BinarySearchTree in the in-order traversal of leaves
      * */
     public Comparable[] toArray() {
         Comparable[] arr = new Comparable[this.size];
@@ -290,24 +293,3 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Iterab
     }
 
 }
-/*
-Sample input:
-1 3 5 7 9 2 4 6 8 10 -3 -6 -3 0
-
-Output:
-Add 1 : [1] 1
-Add 3 : [2] 1 3
-Add 5 : [3] 1 3 5
-Add 7 : [4] 1 3 5 7
-Add 9 : [5] 1 3 5 7 9
-Add 2 : [6] 1 2 3 5 7 9
-Add 4 : [7] 1 2 3 4 5 7 9
-Add 6 : [8] 1 2 3 4 5 6 7 9
-Add 8 : [9] 1 2 3 4 5 6 7 8 9
-Add 10 : [10] 1 2 3 4 5 6 7 8 9 10
-Remove -3 : [9] 1 2 4 5 6 7 8 9 10
-Remove -6 : [8] 1 2 4 5 7 8 9 10
-Remove -3 : [8] 1 2 4 5 7 8 9 10
-Final: 1 2 4 5 7 8 9 10 
-
-*/
