@@ -231,6 +231,10 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Iterab
     public Comparable[] toArray() {
         Comparable[] arr = new Comparable[this.size];
         /* write code to place elements in array here */
+        if(this.size == 0){
+            System.out.println("The Binary Search Tree is Empty");
+            return arr;
+        }
         Stack<Entry<T>> s = new Stack<>();
         Entry<T> node = this.root;
         int ind = 0;

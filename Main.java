@@ -30,11 +30,13 @@ public class Main {
             // Converts the BST into array in in-order traversal.
             else {
                 Comparable[] arr = t.toArray();
-                System.out.print("Final: ");
-                for(int i=0; i<t.size; i++) {
-                    System.out.print(arr[i] + " ");
+                if(arr.length > 0){
+                    System.out.print("Final: ");
+                    for(int i=0; i<t.size; i++) {
+                        System.out.print(arr[i] + " ");
+                    }
+                    System.out.println();
                 }
-                System.out.println();
                 return;
             }
         }
@@ -82,5 +84,9 @@ Add 7 : [13] 1 2 3 4 5 6 7 8 9 10 12 43 44
 Remove -9 : [12] 1 2 3 4 5 6 7 8 10 12 43 44
 Remove -6 : [11] 1 2 3 4 5 7 8 10 12 43 44
 Final: 1 2 3 4 5 7 8 10 12 43 44
+
+Sample Input - 3
+0
+The Binary Search Tree is Empty
 
 */
