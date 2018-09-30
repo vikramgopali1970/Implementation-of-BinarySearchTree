@@ -220,13 +220,28 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Iterab
         return node.element;
     }
 
-    // TODO: Create an array with the elements using in-order traversal of tree
+    //
+    /**
+     * TODO: Create an array with the elements using in-order traversal of tree
+     * returns a comparable array 
+     * */
     public Comparable[] toArray() {
-        Comparable[] arr = new Comparable[size];
+        Comparable[] arr = new Comparable[this.size];
         /* write code to place elements in array here */
+        Stack<Entry<T>> s = new Stack<>();
+        Entry<T> node = this.root;
+        int ind = 0;
+        while(null != node || s.size()>0){
+            while(null != node){
+                s.push(node);
+                node=node.left;
+            }
+            node = s.pop();
+            arr[ind++] = node.element;
+            node=node.right;
+        }
         return arr;
     }
-
 
 // Start of Optional problem 2
 
